@@ -19,7 +19,6 @@ def set_background_url(url: str):
             background-repeat: no-repeat;
         }}
         [data-testid="stHeader"] {{
-            background: rgba(0,0,0,0);
         }}
         /* Main content container (slightly lighter for readability) */
         .block-container {{
@@ -34,7 +33,6 @@ def set_background_url(url: str):
         h1, h2, h3, h4, h5, h6, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {{
             font-family: 'Poppins', sans-serif !important;
             font-weight: 600;
-            color: #2c3e50;
         }}
 
         html, body, [class*="css"], p, div, span, label {{
@@ -148,4 +146,5 @@ if st.button("Run Analysis", type="primary"):
 
     except Exception as e:
         st.error(f"Something went wrong: {e}")
+
 
