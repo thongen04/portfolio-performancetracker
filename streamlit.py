@@ -12,7 +12,6 @@ def set_background_url(url: str):
         <style>
         /* Dark overlay on background */
         [data-testid="stAppViewContainer"] {{
-             background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
                         url("{url}");
             background-size: cover;
             background-position: center;
@@ -22,7 +21,6 @@ def set_background_url(url: str):
         }}
         /* Main content container (slightly lighter for readability) */
         .block-container {{
-            background: rgba(255,255,255,0.92);
             border-radius: 12px;
             padding: 1rem 1.2rem;
         }}
@@ -146,5 +144,6 @@ if st.button("Run Analysis", type="primary"):
 
     except Exception as e:
         st.error(f"Something went wrong: {e}")
+
 
 
