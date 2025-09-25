@@ -10,8 +10,10 @@ st.set_page_config(page_title="Portfolio Performance Tracker", layout="centered"
 def set_background_url(url: str):
     st.markdown(f"""
         <style>
+        /* Dark overlay on background */
         [data-testid="stAppViewContainer"] {{
-            background-image: url("{url}");
+             background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                        url("{url}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -19,10 +21,31 @@ def set_background_url(url: str):
         [data-testid="stHeader"] {{
             background: rgba(0,0,0,0);
         }}
+        /* Main content container (slightly lighter for readability) */
         .block-container {{
             background: rgba(255,255,255,0.92);
             border-radius: 12px;
             padding: 1rem 1.2rem;
+        }}
+
+         /* === FONT SETTINGS === */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@400&display=swap');
+
+        h1, h2, h3, h4, h5, h6, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {{
+            font-family: 'Poppins', sans-serif !important;
+            font-weight: 600;
+            color: #2c3e50;
+        }}
+
+        html, body, [class*="css"], p, div, span, label {{
+            font-family: 'Roboto', sans-serif !important;
+            font-weight: 400;
+        }}
+
+        div[data-testid="metric-container"] > label {{
+            font-family: 'Poppins', sans-serif !important;
+            font-weight: 600;
+            color: #2c3e50;
         }}
         </style>
     """, unsafe_allow_html=True)
@@ -52,7 +75,6 @@ benchmark_choice = st.selectbox(
 
 if st.button("Run Analysis", type="primary"):
     try:
-        # Parse inputs
         tickers = [t.strip() for t in tickers_input.split(",") if t.strip()]
         shares  = [int(s.strip()) for s in shares_input.split(",") if s.strip()]
 
@@ -63,23 +85,19 @@ if st.button("Run Analysis", type="primary"):
             st.error("The number of tickers and shares must match.")
             st.stop()
 
-        # Download adjusted close prices
         data = yf.download(tickers, start=start_date, end=end_date)["Close"]
-        if isinstance(data, pd.Series):   # single ticker -> DataFrame
+        if isinstance(data, pd.Series):
             data = data.to_frame(name=tickers[0])
-        data = data.dropna(how="all")     # remove empty rows if any
+        data = data.dropna(how="all")
 
-        # ---- Prices chart (responsive) ----
         st.subheader("Prices")
         norm_prices = data / data.iloc[0]
         st.line_chart(norm_prices, use_container_width=True)
 
-        # ---- Portfolio series ----
         weights  = pd.Series(shares, index=norm_prices.columns)
         alloc    = norm_prices * weights
         port_val = alloc.sum(axis=1)
 
-        # ---- Portfolio metrics ----
         daily_ret  = port_val.pct_change().dropna()
         ann_return = daily_ret.mean() * 252
         ann_vol    = daily_ret.std() * np.sqrt(252)
@@ -91,11 +109,9 @@ if st.button("Run Analysis", type="primary"):
         c2.metric("Annual Volatility", f"{ann_vol*100:.2f}%")
         c3.metric("Sharpe Ratio",      f"{sharpe:.2f}")
 
-        # ---- Benchmark (optional, fully responsive) ----
         if "None" not in benchmark_choice:
             bench_symbol = benchmark_choice.split()[0]
             bench = yf.download(bench_symbol, start=start_date, end=end_date)["Close"]
-            # Handle DataFrame/Series cases safely
             if isinstance(bench, pd.DataFrame):
                 bench = bench.squeeze("columns")
             if bench.empty or bench.dropna().empty:
@@ -104,7 +120,6 @@ if st.button("Run Analysis", type="primary"):
 
             bench_norm = bench / bench.iloc[0]
 
-            # Align dates (intersection) for a clean comparison
             idx = port_val.index.intersection(bench_norm.index)
             series_port = (port_val / port_val.loc[idx[0]]).loc[idx]
             series_bench = bench_norm.loc[idx]
@@ -116,7 +131,6 @@ if st.button("Run Analysis", type="primary"):
             ).dropna()
             st.line_chart(combined, use_container_width=True)
 
-            # Benchmark metrics (based on its own series)
             bench_ret        = series_bench.pct_change().dropna()
             bench_ann_return = bench_ret.mean() * 252
             bench_ann_vol    = bench_ret.std() * np.sqrt(252)
@@ -128,7 +142,6 @@ if st.button("Run Analysis", type="primary"):
             b2.metric("Annual Volatility", f"{bench_ann_vol*100:.2f}%")
             b3.metric("Sharpe Ratio",      f"{bench_sharpe:.2f}")
         else:
-            # Portfolio-only view (responsive)
             st.subheader("Portfolio Value (Normalised)")
             st.line_chart((port_val / port_val.iloc[0]).to_frame("Portfolio"),
                           use_container_width=True)
