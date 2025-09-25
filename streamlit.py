@@ -12,15 +12,18 @@ def set_background_url(url: str):
         <style>
         /* Dark overlay on background */
         [data-testid="stAppViewContainer"] {{
+             background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
                         url("{url}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }}
         [data-testid="stHeader"] {{
+            background: rgba(0,0,0,0);
         }}
         /* Main content container (slightly lighter for readability) */
         .block-container {{
+            background: rgba(255,255,255,0.92);
             border-radius: 12px;
             padding: 1rem 1.2rem;
         }}
@@ -31,6 +34,7 @@ def set_background_url(url: str):
         h1, h2, h3, h4, h5, h6, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {{
             font-family: 'Poppins', sans-serif !important;
             font-weight: 600;
+            color: #2c3e50;
         }}
 
         html, body, [class*="css"], p, div, span, label {{
@@ -49,7 +53,7 @@ def set_background_url(url: str):
 set_background_url("https://media.istockphoto.com/id/1300120223/photo/digital-data-financial-investment-trends-financial-business-diagram-with-charts-and-stock.jpg?s=612x612&w=0&k=20&c=gQCwdSMiohFpR6XU-8v20sImgOhZEh4ajlr6RmVCXDA=")
 
 st.markdown(
-    "<h1 style='text-align: center;'>📊 Portfolio Tracker Dashboard</h1>",
+    "<h1 style='text-align: center; color: #2c3e50;'>📊 Portfolio Tracker Dashboard</h1>",
     unsafe_allow_html=True
 )
 
@@ -144,6 +148,3 @@ if st.button("Run Analysis", type="primary"):
 
     except Exception as e:
         st.error(f"Something went wrong: {e}")
-
-
-
