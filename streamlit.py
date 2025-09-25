@@ -53,7 +53,7 @@ def set_background_url(url: str):
 set_background_url("https://media.istockphoto.com/id/1300120223/photo/digital-data-financial-investment-trends-financial-business-diagram-with-charts-and-stock.jpg?s=612x612&w=0&k=20&c=gQCwdSMiohFpR6XU-8v20sImgOhZEh4ajlr6RmVCXDA=")
 
 st.markdown(
-    "<h1 style='text-align: center; color: #2c3e50;'>📊 Portfolio Tracker Dashboard</h1>",
+    "<h1 style='text-align: center;'>📊 Portfolio Tracker Dashboard</h1>",
     unsafe_allow_html=True
 )
 
@@ -148,3 +148,4 @@ if st.button("Run Analysis", type="primary"):
 
     except Exception as e:
         st.error(f"Something went wrong: {e}")
+
