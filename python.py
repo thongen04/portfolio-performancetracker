@@ -16,8 +16,8 @@ def rsi(series, window=14):
 start_date, end_date = '2020-01-01', '2024-12-31'
 rf_annual = 0.01                     
 bench_symbol = 'SPY'                   
-tickers = ['AAPL', 'AMZN', 'MSFT']
-shares  = [10, 5, 2]
+tickers = ['AAPL', 'MSFT', 'GOOGL']
+shares  = [10, 5, 4]
 frames = []
 for t in tickers:
     try:
