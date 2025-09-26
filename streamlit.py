@@ -11,36 +11,36 @@ st.set_page_config(page_title="Portfolio Performance Tracker", layout="centered"
 def set_background_url(url: str):
     st.markdown(f"""
         <style>
-        /* Dark overlay on background */
+        /* Background + card */
         [data-testid="stAppViewContainer"] {{
              background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
                         url("{url}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-        }}
-        /* Main content container */
+       }}
         .block-container {{
             background: rgba(255,255,255,0.92);
             border-radius: 12px;
             padding: 1rem 1.2rem;
         }}
-        /* Main content container */
-        .block-container {{
-            background: rgba(255,255,255,0.92);
-            border-radius: 12px;
-            padding: 1rem 1.2rem;
+
+        /* FORCE headings to black (title + section headers) */
+        .block-container h1,
+        .block-container h2,
+        .block-container h3,
+        .block-container .stMarkdown h1,
+        .block-container .stMarkdown h2,
+        .block-container .stMarkdown h3 {{
+            color: #000 !important;
         }}
-        /* Force subheaders + metric text black */
-        h2, .stMarkdown h2,
+
+        /* FORCE metric widget text (labels + big numbers + +/- deltas) to black */
         div[data-testid="metric-container"] label,
-        div[data-testid="metric-container"] div {{
-            color: black !important;
-        }}
-        /* Force ALL form labels black */
-        label, .stTextInput label, .stNumberInput label,
-        .stDateInput label, .stSelectbox label {{
-            color: black !important;
+        div[data-testid="stMetricLabel"],
+        div[data-testid="stMetricValue"],
+        div[data-testid="stMetricDelta"] {{
+            color: #000 !important;
         }}
         /* === Fonts === */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@400&display=swap');
@@ -57,6 +57,9 @@ def set_background_url(url: str):
             font-weight: 600;
             color: #2c3e50;
         }}
+
+        /* Keep form controls/labels as they were (no change) */
+        /* (intentionally no global * {color} here) */
         </style>
     """, unsafe_allow_html=True)
 
@@ -245,6 +248,7 @@ if st.button("Run Analysis", type="primary"):
 
     except Exception as e:
         st.error(f"Something went wrong: {e}")
+
 
 
 
