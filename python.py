@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from math import sqrt
+
+# -------- Technical Indicators (helper functions) --------
 def ema(series, span):
     return series.ewm(span=span, adjust=False).mean()
 
@@ -13,11 +15,21 @@ def rsi(series, window=14):
     loss  = (-delta.clip(upper=0)).ewm(alpha=1/window, adjust=False).mean()
     rs = gain / loss
     return 100 - (100 / (1 + rs))
+
+# -------- User Inputs (edit as needed) --------
 start_date, end_date = '2020-01-01', '2024-12-31'
 rf_annual = 0.01                     
 bench_symbol = 'SPY'                   
 tickers = ['AAPL', 'MSFT', 'GOOGL']
 shares  = [10, 6, 2]
+
+# Basic validation
+if len(tickers) == 0:
+    raise ValueError("Please provide at least one ticker.")
+if len(tickers) != len(shares):
+    raise ValueError("Length of 'tickers' and 'shares' must match.")
+
+# -------- Download Prices --------
 frames = []
 for t in tickers:
     try:
@@ -34,10 +46,14 @@ if not frames:
 
 prices = pd.concat(frames, axis=1).dropna(how='all')
 print("☑ Downloaded columns:", list(prices.columns))
+
+# -------- Build Portfolio (share-weighted, normalised) --------
 norm = prices / prices.iloc[0]                     
 share_series = pd.Series(shares, index=norm.columns)
 money_paths = norm * share_series
-port_val = money_paths.sum(axis=1)    
+port_val = money_paths.sum(axis=1)  
+
+# -------- Performance Metrics --------
 daily_ret  = port_val.pct_change().dropna()
 annual_ret = (1 + daily_ret.mean())**252 - 1
 annual_vol = daily_ret.std() * sqrt(252)
@@ -47,12 +63,16 @@ print("\n----- Portfolio Metrics -----")
 print(f"Annual Return: {annual_ret:.2%}")
 print(f"Annual Volatility: {annual_vol:.2%}")
 print(f"Sharpe Ratio: {sharpe:.2f}")
+
+# -------- Plot: Portfolio (normalised) --------
 plt.figure(figsize=(10,5))
 (port_val / port_val.iloc[0]).plot(label="Portfolio")
 plt.title("Portfolio Value Over Time (Normalised)")
 plt.xlabel("Date"); plt.ylabel("Normalised Value"); plt.legend()
 plt.tight_layout()
 plt.show()
+
+# -------- Optional: Benchmark comparison --------
 bh = yf.Ticker(bench_symbol).history(start=start_date, end=end_date, auto_adjust=True)
 if not bh.empty and 'Close' in bh.columns:
     bench_norm = bh['Close'] / bh['Close'].iloc[0]
@@ -73,6 +93,8 @@ if not bh.empty and 'Close' in bh.columns:
     print(f"Out/Under-performance vs {bench_symbol}: {(port_cum - bench_cum):+.2%}")
 else:
     print(f"⚠ Benchmark {bench_symbol} had no data.")
+
+# -------- Tidy outputs for report (tables) --------
 detail = pd.DataFrame({"date": port_val.index, "portfolio_value": port_val.values}) 
 
 metric = pd.DataFrame({
@@ -89,17 +111,21 @@ hist = yf.Ticker(indicator_symbol).history(start=start_date, end=end_date, auto_
 if not hist.empty and {'Close','Volume'}.issubset(hist.columns):
     close = hist['Close']; vol = hist['Volume']
 
+    # Bollinger Bands (20d SMA ± 2 std)
     sma20 = close.rolling(20).mean()
     std20 = close.rolling(20).std()
     upper = sma20 + 2*std20
     lower = sma20 - 2*std20
 
+    # MACD (12-26-9)
     macd_line = ema(close, 12) - ema(close, 26)
     signal    = ema(macd_line, 9)
     macd_hist = macd_line - signal
 
+    # RSI(14)
     rsi14 = rsi(close, 14)
 
+    # Multi-panel plot
     fig = plt.figure(figsize=(12,9))
     gs = fig.add_gridspec(4, 1, hspace=0.05)
     ax_price = fig.add_subplot(gs[0, 0])
@@ -134,4 +160,3 @@ if not hist.empty and {'Close','Volume'}.issubset(hist.columns):
     plt.show()
 else:
     print(f"⚠ Not enough data to plot indicators for {indicator_symbol}.")
-
