@@ -42,6 +42,9 @@ def set_background_url(url: str):
         div[data-testid="stMetricDelta"] {{
             color: #000 !important;
         }}
+
+        /* Keep form controls/labels as they were (no change) */
+        /* (intentionally no global * {color} here) */
         /* === Fonts === */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@400&display=swap');
         h1, h2, h3, h4, h5, h6, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {{
@@ -58,8 +61,6 @@ def set_background_url(url: str):
             color: #2c3e50;
         }}
 
-        /* Keep form controls/labels as they were (no change) */
-        /* (intentionally no global * {color} here) */
         </style>
     """, unsafe_allow_html=True)
 
@@ -248,6 +249,7 @@ if st.button("Run Analysis", type="primary"):
 
     except Exception as e:
         st.error(f"Something went wrong: {e}")
+
 
 
 
