@@ -11,7 +11,7 @@ st.set_page_config(page_title="Portfolio Performance Tracker", layout="centered"
 def set_background_url(url: str):
     st.markdown(f"""
         <style>
-        /* Background + card */
+        /* Background + overlay */
         [data-testid="stAppViewContainer"] {{
              background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
                         url("{url}");
@@ -43,9 +43,7 @@ def set_background_url(url: str):
             color: #000 !important;
         }}
 
-        /* Keep form controls/labels as they were (no change) */
-        /* (intentionally no global * {color} here) */
-        /* === Fonts === */
+        /* Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@400&display=swap');
         h1, h2, h3, h4, h5, h6, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {{
             font-family: 'Poppins', sans-serif !important;
@@ -249,6 +247,7 @@ if st.button("Run Analysis", type="primary"):
 
     except Exception as e:
         st.error(f"Something went wrong: {e}")
+
 
 
 
