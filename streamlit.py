@@ -24,6 +24,14 @@ def set_background_url(url: str):
             background: rgba(255,255,255,0.92);
             border-radius: 12px;
             padding: 1rem 1.2rem;
+            color: black !important;
+        }}
+        /* Force all text to black */
+        html, body, [class*="css"], p, div, span, label, h1, h2, h3, h4, h5, h6 {{
+            color: black !important;
+        }}
+        div[data-testid="metric-container"] > label, div[data-testid="metric-container"] > div {{
+            color: black !important;
         }}
         /* === Fonts === */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@400&display=swap');
@@ -228,3 +236,4 @@ if st.button("Run Analysis", type="primary"):
 
     except Exception as e:
         st.error(f"Something went wrong: {e}")
+
