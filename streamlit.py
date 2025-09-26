@@ -25,10 +25,21 @@ def set_background_url(url: str):
             border-radius: 12px;
             padding: 1rem 1.2rem;
         }}
-        /* Force all subheaders + metric text to black */
+        /* Main content container */
+        .block-container {{
+            background: rgba(255,255,255,0.92);
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+        }}
+        /* Force subheaders + metric text black */
         h2, .stMarkdown h2,
         div[data-testid="metric-container"] label,
         div[data-testid="metric-container"] div {{
+            color: black !important;
+        }}
+        /* Force ALL form labels black */
+        label, .stTextInput label, .stNumberInput label,
+        .stDateInput label, .stSelectbox label {{
             color: black !important;
         }}
         /* === Fonts === */
@@ -234,6 +245,7 @@ if st.button("Run Analysis", type="primary"):
 
     except Exception as e:
         st.error(f"Something went wrong: {e}")
+
 
 
 
