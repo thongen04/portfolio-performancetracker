@@ -17,7 +17,7 @@ start_date, end_date = '2020-01-01', '2024-12-31'
 rf_annual = 0.01                     
 bench_symbol = 'SPY'                   
 tickers = ['AAPL', 'MSFT', 'GOOGL']
-shares  = [10, 5, 4]
+shares  = [10, 6, 2]
 frames = []
 for t in tickers:
     try:
@@ -134,3 +134,4 @@ if not hist.empty and {'Close','Volume'}.issubset(hist.columns):
     plt.show()
 else:
     print(f"⚠ Not enough data to plot indicators for {indicator_symbol}.")
+
