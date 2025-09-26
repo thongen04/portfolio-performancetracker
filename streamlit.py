@@ -24,6 +24,9 @@ def set_background_url(url: str):
             background: rgba(255,255,255,0.92);
             border-radius: 12px;
             padding: 1rem 1.2rem;
+          }}
+        /* Subheader text forced to black */
+        h2, .stMarkdown h2 {{
             color: black !important;
         }}
         /* === Fonts === */
@@ -229,5 +232,6 @@ if st.button("Run Analysis", type="primary"):
 
     except Exception as e:
         st.error(f"Something went wrong: {e}")
+
 
 
