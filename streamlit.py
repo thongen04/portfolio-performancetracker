@@ -43,6 +43,17 @@ def set_background_url(url: str):
             color: #000 !important;
         }}
 
+        /* Form labels -> black */
+        .block-container label,
+        .block-container [data-testid="stWidgetLabel"],
+        .block-container .stTextInput > label,
+        .block-container .stNumberInput > label,
+        .block-container .stDateInput > label,
+        .block-container .stSelectbox > label {{
+            color: #000 !important;
+            opacity: 1 !important;
+        }}
+
         /* Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@400&display=swap');
         h1, h2, h3, h4, h5, h6, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {{
@@ -247,6 +258,7 @@ if st.button("Run Analysis", type="primary"):
 
     except Exception as e:
         st.error(f"Something went wrong: {e}")
+
 
 
 
